@@ -241,10 +241,10 @@ export class Theme {
     return JSON.stringify(serializeThemeConfig(this.antdConfig), null, 2);
   }
 
-  getColorVariants(color: string): ColorVariants {
+  getColorVariants(theme: SupersetTheme, color: string): ColorVariants {
     const firstLetterCapped = color.charAt(0).toUpperCase() + color.slice(1);
     if (color === 'default' || color === 'grayscale') {
-      const isDark = this.isThemeDark();
+      const isDark = tinycolor(theme.colorBgLayout).isDark();
 
       const flipBrightness = (baseColor: string): string => {
         if (!isDark) return baseColor;
@@ -266,17 +266,29 @@ export class Theme {
       };
     }
 
-    const theme = this.getToken.bind(this);
+    const getToken = (tokenName: string): string => {
+      const value = theme[tokenName as keyof SupersetTheme];
+      if (typeof value === 'string') {
+        return value;
+      }
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn(
+          `Theme token "${tokenName}" is missing or not a string. Falling back to a default color.`,
+        );
+      }
+      return theme.colors.error.base;
+    };
+
     return {
-      active: theme(`color${firstLetterCapped}Active`),
-      textActive: theme(`color${firstLetterCapped}TextActive`),
-      text: theme(`color${firstLetterCapped}Text`),
-      textHover: theme(`color${firstLetterCapped}TextHover`),
-      hover: theme(`color${firstLetterCapped}Hover`),
-      borderHover: theme(`color${firstLetterCapped}BorderHover`),
-      border: theme(`color${firstLetterCapped}Border`),
-      bgHover: theme(`color${firstLetterCapped}BgHover`),
-      bg: theme(`color${firstLetterCapped}Bg`),
+      active: getToken(`color${firstLetterCapped}Active`),
+      textActive: getToken(`color${firstLetterCapped}TextActive`),
+      text: getToken(`color${firstLetterCapped}Text`),
+      textHover: getToken(`color${firstLetterCapped}TextHover`),
+      hover: getToken(`color${firstLetterCapped}Hover`),
+      borderHover: getToken(`color${firstLetterCapped}BorderHover`),
+      border: getToken(`color${firstLetterCapped}Border`),
+      bgHover: getToken(`color${firstLetterCapped}BgHover`),
+      bg: getToken(`color${firstLetterCapped}Bg`),
     };
   }
 

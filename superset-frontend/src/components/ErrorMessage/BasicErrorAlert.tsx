@@ -42,7 +42,7 @@ export function BasicErrorAlert({
   title,
 }: BasicErrorAlertProps) {
   const theme = useTheme();
-  const variants = themeObject.getColorVariants(level);
+  const variants = themeObject.getColorVariants(theme, level);
   const style: React.CSSProperties = {
     backgroundColor: variants.bg,
     borderColor: variants.border,

@@ -36,8 +36,6 @@ const ThemeSelect: React.FC<ThemeSelectProps> = ({
     changeThemeMode(mode);
   };
 
-  console.log({ themeMode });
-
   const themeIconMap: Record<ThemeMode, React.ReactNode> = {
     [ThemeMode.LIGHT]: <Icons.SunOutlined />,
     [ThemeMode.DARK]: <Icons.MoonOutlined />,

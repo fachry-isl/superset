@@ -37,7 +37,7 @@ export function Label(props: LabelProps) {
     ...rest
   } = props;
 
-  const baseColor = themeObject.getColorVariants(type);
+  const baseColor = themeObject.getColorVariants(theme, type);
   const color = baseColor.active;
   const borderColor = baseColor.border;
   const backgroundColor = baseColor.bg;
